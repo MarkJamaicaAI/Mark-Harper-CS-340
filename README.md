@@ -4,7 +4,7 @@
 ** Student:** Mark Harper
 ** Course:** CS-340  
 ** Term:** Fall 2025  
-** Repository URL:** https://github.com/your-username/your-repo
+** Repository URL:** (https://github.com/MarkJamaicaAI/Mark-Harper-CS-340.git)
 
 This repository contains my final dashboard code (Project Two) and the reusable **CRUD Python module** (from Project One) used to connect the dashboard widgets to the MongoDB database. The reflection below answers the journal questions and is included here so this repo can serve as a portfolio artifact.
 
