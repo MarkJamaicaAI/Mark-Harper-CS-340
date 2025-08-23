@@ -67,6 +67,6 @@ Go-forward strategies: model from use-cases, isolate DB access, index the fields
 
 # 3) What do computer scientists do, and why does it matter?
 
-We turn requirements and data into reliable systems that help organizations make better decisions.
+I turn requirements and data into reliable systems that help organizations make better decisions.
 This dashboard helps a company like Grazioso Salvare quickly filter/visualize adoptable animals and operational metrics, reducing manual steps and saving time. That enables faster matches, better resource allocation, and clearer visibility into the work—direct impact on outcomes.
 
