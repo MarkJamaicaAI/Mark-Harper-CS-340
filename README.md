@@ -35,38 +35,10 @@ export COLLECTION_NAME="animals"
 # 4) Run the app
 python app.py
 
-Reflection (Journal Q&A)
-# 1) How do you write programs that are maintainable, readable, and adaptable?
+# Reflection (Journal Q&A)
+I approached this project the way I approach most real-world software: start from what the user needs, then design the data and interfaces to make those outcomes reliable. For the Grazioso Salvare dashboard, I mapped their questions (filters and views) to a simple document structure and added indexes on the fields used most. The UI (dashboard) and the data layer (CRUD module) were intentionally decoupled. The dashboard handled input validation and visualization; crud.py handled all database interactions behind clear functions. That separation made the codebase maintainable (each part has a single responsibility), readable (small, well-named functions with docstrings), and adaptable (I can change queries or even swap databases with minimal UI changes). I kept credentials in environment variables, pinned dependencies, and added basic logging and error handling so failures are traceable.
 
-I used separation of concerns and a reusable CRUD module:
+Working this way had tangible advantages. It simplified testing, made the dashboard code much cleaner, and created a reusable CRUD layer that I can drop into other projects—such as a small FastAPI service, batch import/export scripts, or analytics notebooks. Compared with earlier assignments, this felt more product-focused: I made practical tradeoffs (e.g., denormalizing some fields for faster reads), ensured the most important paths were performant, and thought about maintainability from the start. Going forward, I’ll keep using the same strategy: derive the data model from user stories, select the right storage technology, define validation and indexes early, automate seeds/migrations, and add a few integration tests for the core queries.
 
-crud.py encapsulates all database reads/writes behind clear functions (create, read, update, delete, plus query helpers).
-
-The dashboard (app.py) only calls CRUD functions; UI code never deals with raw DB details.
-
-I used descriptive names, small single-purpose functions, and docstrings to improve readability.
-
-All configuration (like the Mongo connection string) lives in environment variables, not hard-coded values.
-
-Advantages: Testing becomes easier, the UI and data layers can evolve independently, and I can reuse crud.py in a CLI tool or a future web/API service without rewriting database logic.
-
-Future reuse: The module can power batch imports/exports, data-cleaning scripts, or a REST API (e.g., FastAPI) that multiple clients use.
-
-# 2) How do you approach a problem as a computer scientist?
-
-I worked requirements → data model → interfaces:
-
-Clarified what Grazioso Salvare needs (filters, views, KPIs) and mapped that to a simple MongoDB schema with the right indexes.
-
-Built iteratively: start with core “view/filter” flows, then add charts/interactions once queries are correct and fast.
-
-Kept feedback loops short (test with realistic data, handle nulls/missing fields, verify edge cases).
-
-Compared with earlier assignments, this project felt more product-oriented: I prioritized UX, performance, and maintainability.
-Go-forward strategies: model from use-cases, isolate DB access, index the fields I query, parameterize config, and add quick integration tests for critical queries.
-
-# 3) What do computer scientists do, and why does it matter?
-
-I turn requirements and data into reliable systems that help organizations make better decisions.
-This dashboard helps a company like Grazioso Salvare quickly filter/visualize adoptable animals and operational metrics, reducing manual steps and saving time. That enables faster matches, better resource allocation, and clearer visibility into the work—direct impact on outcomes.
+At a higher level, this is what computer scientists do: we convert requirements and data into dependable systems that make people more effective. For a company like Grazioso Salvare, the dashboard removes manual steps and gives them fast, trustworthy insight—helping staff match animals to adopters more quickly, track operations with less friction, and ultimately improve outcomes.
 
