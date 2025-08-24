@@ -34,7 +34,7 @@ export COLLECTION_NAME="animals"
 
 # 4) Run the app
 python app.py
-
+```
 # Reflection (Journal Q&A)
 I approached this project the way I approach most real-world software: start from what the user needs, then design the data and interfaces to make those outcomes reliable. For the Grazioso Salvare dashboard, I mapped their questions (filters and views) to a simple document structure and added indexes on the fields used most. The UI (dashboard) and the data layer (CRUD module) were intentionally decoupled. The dashboard handled input validation and visualization; crud.py handled all database interactions behind clear functions. That separation made the codebase maintainable (each part has a single responsibility), readable (small, well-named functions with docstrings), and adaptable (I can change queries or even swap databases with minimal UI changes). I kept credentials in environment variables, pinned dependencies, and added basic logging and error handling so failures are traceable.
 
