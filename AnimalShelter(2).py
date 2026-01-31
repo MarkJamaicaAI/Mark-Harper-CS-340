@@ -1,43 +1,86 @@
+import os
 from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure
+from dotenv import load_dotenv
+
 
 class AnimalShelter:
     """CRUD operations for Animal collection in MongoDB."""
 
-    def __init__(self, username, password,
-                 host='nv-desktop-services.apporto.com', port=30685):
-        """Initialize MongoDB connection using pass-through parameters."""
+    def __init__(self):
+        """Initialize MongoDB connection using environment variables."""
+
+        load_dotenv()
+
+        username = os.getenv("MONGO_USER")
+        password = os.getenv("MONGO_PASS")
+        host = os.getenv("MONGO_HOST", "nv-desktop-services.apporto.com")
+        port = os.getenv("MONGO_PORT", "30685")
+
+        if not username or not password:
+            raise ValueError("Missing database credentials.")
+
         try:
-            self.client = MongoClient(
-                f"mongodb://{username}:{password}@{host}:{port}/?authSource=AAC"
-            )
-            self.database = self.client['AAC']
-            self.collection = self.database['animals']
+            uri = f"mongodb://{username}:{password}@{host}:{port}/?authSource=AAC"
+
+            self.client = MongoClient(uri)
+            self.database = self.client["AAC"]
+            self.collection = self.database["animals"]
+
         except ConnectionFailure as e:
-            print(f"Connection failed: {e}")
-            raise
+            raise ConnectionError(f"Database connection failed: {e}")
 
+    # ---------- CREATE ----------
     def create(self, data):
-        """Insert a document into the database."""
-        if data is not None and isinstance(data, dict):
-            try:
-                result = self.collection.insert_one(data)
-                return result.acknowledged
-            except Exception as e:
-                print(f"Create failed: {e}")
-                return False
-        else:
-            raise Exception("Data must be a non-empty dictionary")
 
-    def read(self, query=None):
-        """
-        Read documents matching the query.
-        Returns JSON-safe documents (Mongo `_id` excluded).
-        """
+        if not isinstance(data, dict):
+            raise ValueError("Data must be a dictionary")
+
         try:
-            q = query or {}
-            # Exclude Mongo's _id so Dash gets JSON-serializable docs
-            return list(self.collection.find(q, {"_id": False}))
+            result = self.collection.insert_one(data)
+            return result.acknowledged
+
+        except Exception as e:
+            print(f"Create failed: {e}")
+            return False
+
+    # ---------- READ ----------
+    def read(self, query=None):
+
+        try:
+            query = query or {}
+
+            return list(self.collection.find(query, {"_id": False}))
+
         except Exception as e:
             print(f"Read failed: {e}")
             return []
+
+    # ---------- UPDATE ----------
+    def update(self, query, new_values):
+
+        if not isinstance(new_values, dict):
+            raise ValueError("Updated data must be a dictionary")
+
+        try:
+            result = self.collection.update_many(
+                query,
+                {"$set": new_values}
+            )
+
+            return result.modified_count
+
+        except Exception as e:
+            print(f"Update failed: {e}")
+            return 0
+
+    # ---------- DELETE ----------
+    def delete(self, query):
+
+        try:
+            result = self.collection.delete_many(query)
+            return result.deleted_count
+
+        except Exception as e:
+            print(f"Delete failed: {e}")
+            return 0
